@@ -1,0 +1,25 @@
+version: "3"
+services:
+  huffman_generator:
+    build:
+      context: .
+      args:
+        - HUFFMAN_DIR_PATH="."
+    depends_on:
+      - rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - data:/files
+  rabbitmq:
+    image: "rabbitmq:management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - 'rabbitmq_data:/data'
+
+volumes:
+  rabbitmq_data:
+  data:
