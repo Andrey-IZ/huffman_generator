@@ -1,5 +1,5 @@
 FROM python:3.9-slim
-COPY . /app
+ADD . /app
 WORKDIR /app
 
 # RUN python -m pip install --upgrade pip
