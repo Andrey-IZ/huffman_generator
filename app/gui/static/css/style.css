@@ -1,0 +1,23 @@
+table.wikitable {
+    background-color: #f8f9fa;
+    color: #222;
+    margin: 1em 0;
+    border: 1px solid #a2a9b1;
+    border-collapse: collapse;
+}
+
+table {
+    display: table;
+    border-collapse: separate;
+    box-sizing: border-box;
+    border-spacing: 2px;
+    border-color: grey;
+}
+
+table {
+    font-size: 100%;
+
+    #parent{ 
+  display: grid; 
+  grid-template-columns: 40% 60%; 
+} 

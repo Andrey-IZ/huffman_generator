@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Расчет кодов Хаффмана</title>
+		<script>
+			function filesize(elem){
+				document.cookie = `filesize=${elem.files[0].size}`
+			}
+		</script>
+		<script src="static/js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="static/js/socket.io.min.js"></script>
+		<script type="text/javascript" src="static/js/application.js"></script>
+	</head>
+<body>
+<h1>Расчет кодов Хаффмана</h1>
+<h3>можно рассчитать выбрав список файлов или путь к директории с файлами</h3>
+<div  id="parent">
+	<div>
+		<h5>Выберите файлы</h5>
+		<form method="post" action="/by_files" enctype="multipart/form-data">
+			<dl>
+				<p><input type="file" name="files[]" multiple="true" autocomplete="off" oninput="filesize(this);" required></p>
+			</dl>
+			<p><input type="submit" value="Старт"></p>
+		</form>
+	</div>
+	<hr/>
+	<div>
+		<form action = "/by_dir" method = "post">
+         	<p>Путь к файлам: {{ dir_path_to_files }} </p>
+         	<p><input type = "submit" value = "Старт" /></p>
+      </form> 
+	</div>
+</div>
+<div class="container" id="content">
+    <div class="row">
+		<div id="log">
+		</div> <!-- /#log -->
+    </div>
+</div>
+<hr>
+<div>
+	{% with messages = get_flashed_messages() %}
+	{% if messages %}
+		<ul class=flashes>
+		{% for message in messages %}
+		<li>{{ message }}</li>
+		{% endfor %}
+		</ul>
+	{% endif %}
+
+	{% endwith %}
+</div>
+  </body>
+</html>

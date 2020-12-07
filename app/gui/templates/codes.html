@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href="static/css/style.css" rel="stylesheet">
+    <title>Расчет кодов Хаффмана</title>
+</head>
+  <body>
+  <h1>Таблица кодов Хаффмана</h1>
+  <h5>
+    {% if save_path %}
+    {{ '(сохранено в файл: {})'.format(save_path) }}
+    {% endif %}
+  </h5>
+  <hr>
+  <div>
+  	{% if code_table %}
+      <table class="table.wikitable">
+        <tr>
+          <td>Символ</td>
+          <td>Символьный код</td>
+          <td>Код Хаффмана</td>
+        </tr>
+        {% for ch, och, code in code_table %}
+        <tr>
+          <td class=""><span>{{ ch }}</span></td>
+          <td class=""><span>{{ och }}</span></td>
+          <td class=""><span>{{ code }}</span></td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% else %} 
+      <h2>Таблица не была сгенерирована</h2>
+	  {% endif %}
+    </div>
+  </body>
+</html>
