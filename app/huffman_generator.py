@@ -22,7 +22,7 @@ from concurrent.futures import ThreadPoolExecutor, wait, as_completed, ALL_COMPL
 
 
 __author__ = 'andrey'
-__date__ = "1.12.2020"
+__date__ = "3.12.2020"
 __license__ = "GPL"
 __version__ = "0.1.0"
 
@@ -32,7 +32,7 @@ QUEUE = 'q_char_prefix_freq_map'
 ROUTING_KEY = 'rk_freq_map'
 HUFFMAN_CODE_FILE = 'huffman_codes.csv'
 ACK_END = str('кон123').encode('utf-8')
-
+HOST = '0.0.0.0'
 
 LOG_FORMAT = ('%(levelname) -10s %(asctime)s %(funcName) -35s : %(message)s')
 LOGGER = logging.getLogger(__name__)
@@ -57,9 +57,10 @@ def wait_for_rabbitmq_start():
     is_reachable = False
     while not is_reachable:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        LOGGER.warning("wait for rabbitmq is running...")
+
+        LOGGER.warning(f"wait for rabbitmq is running on {HOST}...")
         try:
-            s.connect(('rabbitmq', 5672))
+            s.connect((HOST, 5672))
             is_reachable = True
         except socket.error:
             time.sleep(2)
@@ -73,7 +74,7 @@ def generate_huffman_code(output_path, dir_path_or_file_list, stats=None):
         stats = {'done': 0, 'delayed': 0, 'exception': ''}
     # collect the statistics for the Huffman code
     try:
-        with rabbitpy.Connection("amqp://guest:guest@rabbitmq:5672/%2F") as connection:   # url='amqp://guest:guest@rabbitmq:5672/%2F'
+        with rabbitpy.Connection(f"amqp://guest:guest@{HOST}:5672/%2F") as connection:   # url='amqp://guest:guest@rabbitmq:5672/%2F'
             with connection.channel() as channel:
                 rabbitpy.delete_queue(queue_name=QUEUE)
 
