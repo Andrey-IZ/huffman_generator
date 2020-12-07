@@ -159,6 +159,7 @@ def gather_map_worker(channel, *args):
             if not chunk:
                 break
             counter.update(chunk.decode('utf-8'))
+        fd.close()
     except Exception as e:
         raise ValueError("{} can't read: {}".format(url, e))
 
