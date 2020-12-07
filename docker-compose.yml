@@ -1,25 +1,45 @@
-version: "3"
+version: "3.5"
 services:
+  rabbitmq:  # login guest:guest
+    build: 
+      context: ./rabbitmq
+      dockerfile: Dockerfile
+    hostname: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://rabbitmq:15672"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+    networks: 
+      - huffman_net
+    volumes:
+      - rabbitmq_data:/data
+  
   huffman_generator:
-    build:
-      context: .
-      args:
-        - HUFFMAN_DIR_PATH="."
+    build: 
+      context: ./app
+      dockerfile: Dockerfile
+    restart: on-failure
     depends_on:
       - rabbitmq
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "5000:5000"
+    networks: 
+      - huffman_net
+    env_file: 
+      - ./.env
+    # healthcheck:
+      # test: ["CMD", "curl", "-f", "http://localhost:5000/"]
     volumes:
-      - data:/files
-  rabbitmq:
-    image: "rabbitmq:management"
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    volumes:
-      - 'rabbitmq_data:/data'
+      - ${DIR_FILES_PATH}:/files
+      - ./app:/app
+networks: 
+  huffman_net:
+    driver: bridge
 
 volumes:
   rabbitmq_data:
-  data:
