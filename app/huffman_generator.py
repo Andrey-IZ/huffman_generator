@@ -22,9 +22,9 @@ from concurrent.futures import ThreadPoolExecutor, wait, as_completed, ALL_COMPL
 
 
 __author__ = 'andrey'
-__date__ = "3.12.2020"
+__date__ = "7.12.2020"
 __license__ = "GPL"
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 EXCHANGE = 'ex_char_prefix'
 PATH = '.'
@@ -32,7 +32,8 @@ QUEUE = 'q_char_prefix_freq_map'
 ROUTING_KEY = 'rk_freq_map'
 HUFFMAN_CODE_FILE = 'huffman_codes.csv'
 ACK_END = str('кон123').encode('utf-8')
-HOST = '0.0.0.0'
+# HOST = '0.0.0.0'
+HOST = 'rabbitmq'
 
 LOG_FORMAT = ('%(levelname) -10s %(asctime)s %(funcName) -35s : %(message)s')
 LOGGER = logging.getLogger(__name__)
@@ -76,8 +77,6 @@ def generate_huffman_code(output_path, dir_path_or_file_list, stats=None):
     try:
         with rabbitpy.Connection(f"amqp://guest:guest@{HOST}:5672/%2F") as connection:   # url='amqp://guest:guest@rabbitmq:5672/%2F'
             with connection.channel() as channel:
-                rabbitpy.delete_queue(queue_name=QUEUE)
-
                 exchange = rabbitpy.Exchange(channel, EXCHANGE)
                 exchange.declare()
 
@@ -96,7 +95,7 @@ def generate_huffman_code(output_path, dir_path_or_file_list, stats=None):
             consumer_thread.join()
     except (rabbitpy.exceptions.ConnectionResetException,
             rabbitpy.exceptions.AMQPConnectionForced) as error:
-        LOGGER.error('Connection error: %s', error)
+        LOGGER.error('RabbitPy: Connection error: %s', error)
     
     if stats['delayed'] == 0 and len(stats['exception']) == 0:
         code_table = _generate_code_table(counter)
@@ -188,7 +187,7 @@ def task_done(future, args):
     # if future.cancelled():
     #     LOGGER.warning('task canceled: {}'.format(future.obj))
         
-    LOGGER.info("task done {}".format(stats))
+    LOGGER.debug("task done {}".format(stats))
 
 
 def consumer(connection, counter):
