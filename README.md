@@ -6,30 +6,33 @@ Andrey Zaporozhtsev 07/12/2020
 
 Test of asynchronous calculation of Huffman code table. 
 
-# This repository is a sample application that updates a webpage using a background thread for all users connected.
-# It is based on the very useful Flask-SocketIO code.
-
-https://github.com/miguelgrinberg/Flask-SocketIO
+This repository is a sample application that updates a webpage using a background thread for all users connected.
+It is based on the very useful Flask-SocketIO code.
 
 To use - please clone the repository and then set up your virtual environment using the requirements.txt file with pip and virtualenv. You can achieve this with:
 
 
     git clone git@github.com:Andrey-IZ/huffman_generator.git
-    cd huffman_generator/app
-    python -m venv huffman
+    cd huffman_generator
+    python3 -m venv huffman
     source huffman/bin/activate
     pip install -r requirements.txt
 
+Start the application using web-application:
+launch the browser and go to: http://localhost:5000/ 
+in terminal:
+<code>
+./run.sh
+</code>
 
-Start the application with:
-
+Start the application with (CLI):
 <code>
 sudo docker-compose up -d rabbitmq
 python huffman_generator.py <path_to_files> <output_filename>
 </code>
 
 It will generate the table
-# And visit http://localhost:5000 to see the table.
+And visit http://localhost:5000 to see the table.
 
 Задание:
 
